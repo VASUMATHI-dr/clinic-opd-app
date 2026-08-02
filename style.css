@@ -165,12 +165,18 @@ button { cursor: pointer; border: none; background: none; }
    ============================================================ */
 .screen-login {
   background: linear-gradient(160deg, var(--primary) 0%, var(--primary-dark) 55%, #0A3A82 100%);
-  display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
   padding-top: calc(24px + var(--safe-top));
   padding-bottom: calc(24px + var(--safe-bottom));
+}
+/* Layout only applies while the screen is actually active — this must NOT
+   set `display` unconditionally, or it wins a specificity tie against the
+   base `.screen { display:none }` rule once `.active` is removed and holds
+   the login screen visible underneath the app shell. */
+.screen-login.active {
+  display: flex;
 }
 
 .login-wrap { width: 100%; max-width: 400px; }
