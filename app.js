@@ -217,9 +217,51 @@ els.logoutBtn.addEventListener('click', () => {
   }
 });
 
-function enterApp() {
+/**
+ * ----------------------------------------------------------------------
+ * SCREEN-LEVEL STATE MACHINE (login <-> app shell)
+ * ----------------------------------------------------------------------
+ * There are exactly two top-level screens: #screen-login and #app-shell.
+ * Exactly one of them must be visible at any time. These two functions
+ * are the ONLY code allowed to touch their classes, so there is a single
+ * source of truth and no path can leave both screens visible at once.
+ *
+ * IMPORTANT: we set BOTH `active` and `hidden` explicitly on every call,
+ * rather than only removing one class. `#screen-login` is matched by two
+ * CSS rules of equal specificity — `.screen` (display:none) and
+ * `.screen-login` (display:flex, for the gradient/centering layout) — and
+ * `.screen-login` is declared later in the stylesheet, so once `.active`
+ * is removed, `.screen-login` wins the specificity tie-break and forces
+ * the login screen back to `display:flex`, even though `.screen` says
+ * `display:none`. `.hidden` uses `!important`, so it reliably overrides
+ * that conflict no matter what other display rules exist. Relying on
+ * `active` alone (the previous implementation) is exactly what caused
+ * the login screen to stay visible under the dashboard after a
+ * successful login.
+ */
+function showLoginScreen() {
+  els.appShell.classList.add('hidden');
+
+  els.screenLogin.classList.remove('hidden');
+  els.screenLogin.classList.add('active');
+
+  window.scrollTo(0, 0);
+}
+
+function showAppShell() {
   els.screenLogin.classList.remove('active');
+  els.screenLogin.classList.add('hidden');
+
   els.appShell.classList.remove('hidden');
+
+  // Guarantee the viewport starts pinned to the top of the dashboard,
+  // with no leftover scroll offset from the login screen.
+  window.scrollTo(0, 0);
+  els.appContent.scrollTop = 0;
+}
+
+function enterApp() {
+  showAppShell();
   loadDashboard();
   prepareNewForm();
 }
