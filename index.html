@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Clinic OPD | Patient Manager</title>
-  <meta name="description" content="Doctor's Clinic OPD management app — register patients, search history, all offline-capable." />
+  <title>Clinic OPD | நோயாளி பதிவேடு</title>
+  <meta name="description" content="மருத்துவமனை OPD நோயாளி மேலாண்மை — பதிவு, வருகை வரலாறு, தேடல்." />
 
   <!-- PWA -->
-  <meta name="theme-color" content="#1565C0" />
+  <meta name="theme-color" content="#0F172A" />
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -15,42 +15,38 @@
   <meta name="apple-mobile-web-app-title" content="Clinic OPD" />
   <link rel="icon" type="image/png" href="icons/icon-192.png" />
 
-  <!-- Fonts (Google Fonts - free, cached by service worker via CDN) -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- ============================================================ -->
-  <!-- TOAST / SNACKBAR CONTAINER -->
-  <!-- ============================================================ -->
+  <!-- TOAST -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <!-- ============================================================ -->
   <!-- OFFLINE BANNER -->
-  <!-- ============================================================ -->
   <div id="offline-banner" class="offline-banner hidden">
     <span class="material-dot"></span>
-    <span>No internet connection. Some features are unavailable.</span>
-    <button id="retry-btn" class="retry-btn">Retry</button>
+    <span>இணைய இணைப்பு இல்லை. சில வசதிகள் கிடைக்காது.</span>
+    <button id="retry-btn" class="retry-btn">மீண்டும் முயற்சி</button>
   </div>
 
   <!-- ============================================================ -->
-  <!-- LOGIN SCREEN -->
+  <!-- LOGIN SCREEN                                                  -->
   <!-- ============================================================ -->
   <section id="screen-login" class="screen screen-login active">
     <div class="login-wrap">
       <div class="login-logo">
         <div class="logo-circle">
-          <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="white" stroke-width="2.4" stroke-linecap="round">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="white" stroke-width="2.4" stroke-linecap="round">
             <path d="M12 3v18M3 12h18"/>
           </svg>
         </div>
         <h1>Clinic OPD</h1>
-        <p>Doctor Login</p>
+        <p>நோயாளி பதிவேடு</p>
       </div>
 
       <form id="login-form" class="login-card" autocomplete="off">
@@ -59,7 +55,7 @@
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
-          <input type="password" id="login-password" placeholder="Enter clinic password" required inputmode="text" />
+          <input type="password" id="login-password" placeholder="Clinic password உள்ளிடவும்" required inputmode="text" />
           <button type="button" id="toggle-password" class="icon-btn" aria-label="Show password">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>
@@ -69,17 +65,16 @@
         <div id="login-error" class="field-error hidden"></div>
 
         <button type="submit" class="btn btn-primary btn-large ripple" id="login-btn">
-          <span class="btn-text">Login</span>
+          <span class="btn-text">உள்நுழைக</span>
           <span class="spinner hidden"></span>
         </button>
       </form>
-
-      <p class="login-footer">Secure access for authorized clinic staff only</p>
+      <p class="login-footer">அங்கீகரிக்கப்பட்ட மருத்துவ பணியாளர்களுக்கு மட்டும்</p>
     </div>
   </section>
 
   <!-- ============================================================ -->
-  <!-- APP SHELL (post-login) -->
+  <!-- APP SHELL                                                     -->
   <!-- ============================================================ -->
   <div id="app-shell" class="app-shell hidden">
 
@@ -102,122 +97,222 @@
       </button>
     </header>
 
-    <!-- Main scrollable content -->
+    <!-- Main content -->
     <main class="app-content" id="app-content">
 
-      <!-- ---------------- DASHBOARD VIEW ---------------- -->
+      <!-- ===== DASHBOARD VIEW ===== -->
       <section id="view-dashboard" class="view active">
         <div class="dash-grid">
-          <div class="dash-card">
+          <div class="dash-card dash-card-primary">
             <div class="dash-icon dash-icon-blue">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div class="dash-value" id="dash-today-count">0</div>
-            <div class="dash-label">Today's Patients</div>
+            <div class="dash-label">இன்றைய நோயாளிகள்</div>
           </div>
           <div class="dash-card">
             <div class="dash-icon dash-icon-teal">
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </div>
             <div class="dash-value" id="dash-last-op">-</div>
-            <div class="dash-label">Last OP Number</div>
+            <div class="dash-label">கடைசி OP எண்</div>
           </div>
         </div>
 
+        <!-- Today's visits quick list -->
         <div class="section-card">
-          <h3 class="section-title">Latest Registered Patient</h3>
+          <div class="section-header">
+            <h3 class="section-title">இன்றைய சமீபத்திய நோயாளி</h3>
+          </div>
           <div id="dash-latest-patient" class="latest-patient-empty">
-            No patients registered yet today.
+            இன்று இதுவரை நோயாளிகள் பதிவு செய்யப்படவில்லை.
           </div>
         </div>
 
         <button class="btn btn-primary btn-large ripple fab-cta" id="dash-new-patient-btn">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          <span>New Patient</span>
+          <span>புதிய நோயாளி / Visit</span>
         </button>
       </section>
 
-      <!-- ---------------- REGISTRATION FORM VIEW ---------------- -->
-      <section id="view-register" class="view">
-        <form id="patient-form" class="form-card" autocomplete="off" novalidate>
+      <!-- ===== PATIENTS LIST VIEW ===== -->
+      <section id="view-patients" class="view">
+        <div class="list-toolbar">
+          <div class="search-bar-inline">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="patients-filter" placeholder="பெயர் அல்லது OP தேடவும்…" />
+          </div>
+          <div id="patients-count-badge" class="count-badge">0 நோயாளிகள்</div>
+        </div>
 
+        <div id="patients-list-container">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <p>நோயாளிகள் பட்டியல் ஏற்றப்படுகிறது…</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== REGISTER / NEW VISIT VIEW ===== -->
+      <section id="view-register" class="view">
+
+        <!-- Mode toggle -->
+        <div class="mode-toggle-group">
+          <button class="mode-btn active" id="mode-new" data-mode="new">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            புதிய நோயாளி
+          </button>
+          <button class="mode-btn" id="mode-visit" data-mode="visit">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            மீண்டும் வருகை
+          </button>
+        </div>
+
+        <!-- NEW PATIENT FORM -->
+        <form id="patient-form" class="form-card" autocomplete="off" novalidate>
           <div class="op-preview-card">
-            <span class="op-preview-label">OP Number (auto)</span>
-            <span class="op-preview-value" id="op-preview">Loading…</span>
+            <span class="op-preview-label">OP எண் (தானியங்கி)</span>
+            <span class="op-preview-value" id="op-preview">ஏற்றுகிறது…</span>
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="f-date">Date <span class="req">*</span></label>
+            <label class="field-label" for="f-date">தேதி <span class="req">*</span></label>
             <input type="date" id="f-date" class="text-input" required />
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="f-name">Patient Name <span class="req">*</span></label>
-            <input type="text" id="f-name" class="text-input" placeholder="e.g. Ramesh Kumar" required />
-          </div>
-
-          <div class="field-group">
-            <label class="field-label" for="f-address">Address <span class="req">*</span></label>
-            <textarea id="f-address" class="text-input textarea" rows="2" placeholder="House, street, city" required></textarea>
+            <label class="field-label" for="f-name">நோயாளி பெயர் <span class="req">*</span></label>
+            <input type="text" id="f-name" class="text-input" placeholder="எ.கா. ராமேஷ் குமார்" required />
           </div>
 
           <div class="field-row">
             <div class="field-group field-half">
-              <label class="field-label" for="f-age">Age <span class="req">*</span></label>
-              <input type="number" id="f-age" class="text-input" placeholder="Years" min="0" max="130" inputmode="numeric" required />
+              <label class="field-label" for="f-age">வயது <span class="req">*</span></label>
+              <input type="number" id="f-age" class="text-input" placeholder="வருடங்கள்" min="0" max="130" inputmode="numeric" required />
             </div>
             <div class="field-group field-half">
-              <label class="field-label" for="f-sex">Sex <span class="req">*</span></label>
+              <label class="field-label" for="f-sex">பாலினம் <span class="req">*</span></label>
               <select id="f-sex" class="text-input" required>
-                <option value="" disabled selected>Select</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="" disabled selected>தேர்வு செய்க</option>
+                <option value="Male">ஆண்</option>
+                <option value="Female">பெண்</option>
+                <option value="Other">மற்றவை</option>
               </select>
             </div>
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="f-complaint">Chief Complaint <span class="req">*</span></label>
-            <textarea id="f-complaint" class="text-input textarea" rows="2" placeholder="Presenting complaint" required></textarea>
+            <label class="field-label" for="f-phone">தொலைபேசி எண்</label>
+            <input type="tel" id="f-phone" class="text-input" placeholder="9876543210" inputmode="numeric" />
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="f-investigation">Investigation</label>
-            <textarea id="f-investigation" class="text-input textarea" rows="2" placeholder="Tests ordered / findings"></textarea>
+            <label class="field-label" for="f-address">முகவரி <span class="req">*</span></label>
+            <textarea id="f-address" class="text-input textarea" rows="2" placeholder="வீடு, தெரு, நகரம்" required></textarea>
+          </div>
+
+          <div class="form-divider">
+            <span>வருகை விவரங்கள்</span>
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="f-prescription">Rx (Prescription)</label>
-            <textarea id="f-prescription" class="text-input textarea" rows="3" placeholder="Medicines, dosage, instructions"></textarea>
+            <label class="field-label" for="f-complaint">முதன்மை புகார் <span class="req">*</span></label>
+            <textarea id="f-complaint" class="text-input textarea" rows="2" placeholder="நோயின் அறிகுறிகள்" required></textarea>
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="f-review">Review</label>
-            <input type="text" id="f-review" class="text-input" placeholder="e.g. Review after 5 days" />
+            <label class="field-label" for="f-investigation">பரிசோதனை</label>
+            <textarea id="f-investigation" class="text-input textarea" rows="2" placeholder="இரத்தப் பரிசோதனை / ஸ்கேன் / அறிக்கை"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="f-prescription">மருந்து (Rx)</label>
+            <textarea id="f-prescription" class="text-input textarea" rows="3" placeholder="மருந்துகள், அளவு, வழிமுறைகள்"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="f-review">மறு பரிசோதனை</label>
+            <input type="text" id="f-review" class="text-input" placeholder="எ.கா. 5 நாட்களுக்கு பிறகு வரவும்" />
           </div>
 
           <div class="form-actions">
-            <button type="button" id="clear-btn" class="btn btn-outline ripple">Clear</button>
+            <button type="button" id="clear-btn" class="btn btn-outline ripple">அழி</button>
             <button type="submit" id="submit-btn" class="btn btn-primary ripple">
-              <span class="btn-text">Submit</span>
+              <span class="btn-text">சேமி</span>
               <span class="spinner hidden"></span>
             </button>
           </div>
         </form>
+
+        <!-- EXISTING PATIENT VISIT FORM -->
+        <div id="visit-form-wrap" class="form-card hidden">
+          <div class="field-group">
+            <label class="field-label" for="visit-search">நோயாளியை தேடவும் <span class="req">*</span></label>
+            <div class="search-bar-inline search-bar-tall">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="visit-search" placeholder="பெயர் அல்லது OP எண் தட்டச்சு செய்க…" />
+            </div>
+            <div id="visit-search-results" class="autocomplete-list hidden"></div>
+            <div id="selected-patient-card" class="selected-patient-banner hidden"></div>
+          </div>
+
+          <form id="visit-form" class="visit-fields hidden" autocomplete="off" novalidate>
+            <div class="op-preview-card">
+              <span class="op-preview-label">புதிய OP எண் (தானியங்கி)</span>
+              <span class="op-preview-value" id="visit-op-preview">ஏற்றுகிறது…</span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="v-date">தேதி <span class="req">*</span></label>
+              <input type="date" id="v-date" class="text-input" required />
+            </div>
+
+            <div class="last-visit-box" id="last-visit-box">
+              <!-- populated by JS -->
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="v-complaint">முதன்மை புகார் <span class="req">*</span></label>
+              <textarea id="v-complaint" class="text-input textarea" rows="2" placeholder="இன்றைய அறிகுறிகள்" required></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="v-investigation">பரிசோதனை</label>
+              <textarea id="v-investigation" class="text-input textarea" rows="2" placeholder="பரிசோதனை விவரங்கள்"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="v-prescription">மருந்து (Rx)</label>
+              <textarea id="v-prescription" class="text-input textarea" rows="3" placeholder="மருந்துகள், அளவு, வழிமுறைகள்"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="v-review">மறு பரிசோதனை</label>
+              <input type="text" id="v-review" class="text-input" placeholder="எ.கா. 5 நாட்களுக்கு பிறகு வரவும்" />
+            </div>
+
+            <div class="form-actions">
+              <button type="button" id="visit-clear-btn" class="btn btn-outline ripple">அழி</button>
+              <button type="submit" id="visit-submit-btn" class="btn btn-primary ripple">
+                <span class="btn-text">Visit சேமி</span>
+                <span class="spinner hidden"></span>
+              </button>
+            </div>
+          </form>
+        </div>
       </section>
 
-      <!-- ---------------- SEARCH VIEW ---------------- -->
+      <!-- ===== SEARCH VIEW ===== -->
       <section id="view-search" class="view">
         <div class="search-bar">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="search-input" placeholder="Search by name or OP number…" />
+          <input type="text" id="search-input" placeholder="பெயர் அல்லது OP எண் தேடவும்…" />
         </div>
 
         <div id="search-results" class="search-results">
           <div class="empty-state">
             <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <p>Search for a patient by name or OP number to view their records.</p>
+            <p>நோயாளியை பெயர் அல்லது OP எண் மூலம் தேடவும்.</p>
           </div>
         </div>
       </section>
@@ -226,40 +321,118 @@
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-      <button class="nav-btn active" data-view="dashboard">
+      <button class="nav-btn active" data-view="dashboard" id="nav-dashboard">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
         <span>Dashboard</span>
       </button>
-      <button class="nav-btn" data-view="register">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-        <span>New Patient</span>
+      <button class="nav-btn" data-view="patients" id="nav-patients">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>நோயாளிகள்</span>
       </button>
-      <button class="nav-btn" data-view="search">
+      <button class="nav-btn" data-view="register" id="nav-register">
+        <div class="nav-fab">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="white" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </div>
+        <span>பதிவு</span>
+      </button>
+      <button class="nav-btn" data-view="search" id="nav-search">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <span>Search</span>
+        <span>தேடல்</span>
       </button>
     </nav>
   </div>
 
   <!-- ============================================================ -->
-  <!-- PATIENT HISTORY MODAL -->
+  <!-- PATIENT HISTORY MODAL                                        -->
   <!-- ============================================================ -->
   <div id="history-modal" class="modal-overlay hidden">
-    <div class="modal-sheet">
+    <div class="modal-sheet modal-sheet-tall">
+      <div class="modal-handle-bar"></div>
       <div class="modal-header">
-        <h3 id="history-modal-title">Patient History</h3>
-        <button class="icon-btn" id="history-close-btn" aria-label="Close">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
+        <div class="modal-header-info">
+          <div id="history-avatar" class="patient-avatar patient-avatar-lg">?</div>
+          <div>
+            <h3 id="history-modal-title">நோயாளி வரலாறு</h3>
+            <p id="history-modal-sub" class="modal-sub-text"></p>
+          </div>
+        </div>
+        <div class="modal-header-actions">
+          <button class="btn-icon-pill" id="history-edit-btn" aria-label="திருத்து">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            திருத்து
+          </button>
+          <button class="icon-btn" id="history-close-btn" aria-label="Close">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
       </div>
       <div id="history-modal-body" class="modal-body">
-        <!-- populated by JS -->
+        <!-- JS மூலம் நிரப்பப்படும் -->
       </div>
     </div>
   </div>
 
   <!-- ============================================================ -->
-  <!-- SUCCESS OVERLAY (animated) -->
+  <!-- EDIT PATIENT MODAL                                           -->
+  <!-- ============================================================ -->
+  <div id="edit-modal" class="modal-overlay hidden">
+    <div class="modal-sheet">
+      <div class="modal-handle-bar"></div>
+      <div class="modal-header">
+        <h3>நோயாளி விவரங்கள் திருத்து</h3>
+        <button class="icon-btn" id="edit-close-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-form" autocomplete="off" novalidate>
+          <input type="hidden" id="edit-op-number" />
+
+          <div class="field-group">
+            <label class="field-label" for="edit-name">நோயாளி பெயர் <span class="req">*</span></label>
+            <input type="text" id="edit-name" class="text-input" required />
+          </div>
+
+          <div class="field-row">
+            <div class="field-group field-half">
+              <label class="field-label" for="edit-age">வயது <span class="req">*</span></label>
+              <input type="number" id="edit-age" class="text-input" min="0" max="130" inputmode="numeric" required />
+            </div>
+            <div class="field-group field-half">
+              <label class="field-label" for="edit-sex">பாலினம் <span class="req">*</span></label>
+              <select id="edit-sex" class="text-input" required>
+                <option value="" disabled>தேர்வு செய்க</option>
+                <option value="Male">ஆண்</option>
+                <option value="Female">பெண்</option>
+                <option value="Other">மற்றவை</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="edit-phone">தொலைபேசி எண்</label>
+            <input type="tel" id="edit-phone" class="text-input" inputmode="numeric" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="edit-address">முகவரி <span class="req">*</span></label>
+            <textarea id="edit-address" class="text-input textarea" rows="2" required></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="edit-cancel-btn" class="btn btn-outline ripple">ரத்து செய்</button>
+            <button type="submit" id="edit-save-btn" class="btn btn-primary ripple">
+              <span class="btn-text">சேமி</span>
+              <span class="spinner hidden"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SUCCESS OVERLAY                                              -->
   <!-- ============================================================ -->
   <div id="success-overlay" class="success-overlay hidden">
     <div class="success-card">
@@ -269,12 +442,12 @@
           <path class="success-tick" fill="none" d="M14 27l7 7 16-16"/>
         </svg>
       </div>
-      <h3>Record Saved!</h3>
-      <p id="success-op-text">OP Number: —</p>
+      <h3>பதிவு சேமிக்கப்பட்டது!</h3>
+      <p id="success-op-text">OP எண்: —</p>
     </div>
   </div>
 
-  <!-- Full-screen loading overlay -->
+  <!-- Loading overlay -->
   <div id="loading-overlay" class="loading-overlay hidden">
     <div class="spinner spinner-large"></div>
   </div>
