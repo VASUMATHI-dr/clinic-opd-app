@@ -8,7 +8,7 @@
 // ----------------------------------------------------------------------------
 // CONFIGURATION
 // ----------------------------------------------------------------------------
-const API_URL = 'https://script.google.com/macros/s/AKfycbxX4Ptkv8G8WDfnh-C9wP6ut39RVYQXUHnyOZ05B2vEDf_D47cBg3CpYOBleTmggiSmsA/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzPvvthKOoYQyZnwBG7-Zdh-tUNT9P9XQFNs557tYXbyjjcFR8jh8DWdK7jga6mP8rz_g/exec';
 const SESSION_KEY = 'clinic_logged_in';
 
 // State for "Return Visit" mode
